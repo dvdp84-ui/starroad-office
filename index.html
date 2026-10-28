@@ -15,6 +15,8 @@ table{border-collapse:collapse}th,td{text-align:left;padding:6px 14px 6px 0;bord
 </style></head><body><main>
 <h1>StarRoad 픽셀 오피스</h1>
 <p class="sub">StarRoad의 봇 직원들이 일하고, 커피를 마시고, 정해진 시간에 대회의실에 모이는 모습을 보여줍니다. 캐릭터를 클릭하면 정보가 보여요.</p>
+<p id="real" style="font-weight:bold">실제 상태 기준: 불러오는 중…</p>
+<p class="sub">배지·말풍선·자리 행동은 <b>실제 봇 기록(status.json)</b> 기준이에요. 💻 작업중 · 🟡 대기 · ✅ 보고완료 · ❗ 막힘 · 💤 미가동. 아래 시계와 회의 이동은 <b>연출용 시뮬레이션</b>이에요.</p>
 <h2 id="head"></h2>
 <div class="bar">
 <button id="play" class="primary">⏸ 일시정지</button>
@@ -28,7 +30,7 @@ table{border-collapse:collapse}th,td{text-align:left;padding:6px 14px 6px 0;bord
 <tr><td>07:00–07:40</td><td>아침 보고</td><td>전원 대회의실 집합, 비서실장 주재</td></tr>
 <tr><td>12:00–13:00</td><td>점심 · 커피 타임</td><td>커피 코너 이용 증가</td></tr>
 <tr><td>14:00–14:40</td><td>오후 회의</td><td>전원 대회의실 집합</td></tr></table>
-<h2>직원 명단</h2><table id="roster"><tr><th>이름</th><th>역할</th><th>소속</th></tr></table>
+<h2>직원 명단</h2><table id="roster"><tr><th>이름</th><th>역할</th><th>소속</th><th>실제 상태</th><th>마지막 활동</th></tr></table>
 </main>
 <script>
 const DIVS=[
@@ -52,6 +54,13 @@ const bots=STAFF.map(([name,role,d],i)=>{const div=DIVS.find(v=>v.id===d);const 
 const dx=div.x+38+(k%pr)*66,dy=div.y+70+Math.floor(k/pr)*68;return{i,name,role,div,dx,dy,x:dx,y:dy,tx:dx,ty:dy,mode:"desk",until:400+Math.random()*120,phase:Math.random()*6}});
 const seat=i=>{const t=i<9,k=t?i:i-9;return[MEET.x+95+k*46,t?MEET.y+62:MEET.y+138]};
 const fmt=m=>String(Math.floor(m/60)%24).padStart(2,"0")+":"+String(Math.floor(m%60)).padStart(2,"0");
+const SCOL={"작업중":"#2ecc71","대기":"#f1c40f","보고완료":"#3498db","막힘":"#e74c3c","미가동":"#888"};
+let STATUS=null,UPD=null;
+const kst=iso=>{if(!iso)return"기록 없음";const d=new Date(iso);return d.toLocaleString("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:false})+" (KST)"};
+function stOf(b){const r=STATUS&&STATUS[b.name];if(!r)return{status:"미가동",summary:"기록 없음",lastActive:null};
+let st=r.status;if(st==="작업중"&&r.lastActive&&Date.now()-new Date(r.lastActive)>3600e3)st="대기";return{...r,status:st}}
+async function loadStatus(){try{const r=await fetch("status.json?t="+Date.now(),{cache:"no-store"});const j=await r.json();STATUS=j.bots;UPD=j.updatedAt;
+document.getElementById("real").textContent="실제 상태 기준: "+kst(UPD);roster();ui()}catch(e){document.getElementById("real").textContent="실제 상태 기준: status.json을 불러오지 못했어요"}}
 let sim=410,playing=true,speed=1,sel=-1;
 const c=document.getElementById("c"),ctx=c.getContext("2d");
 function zone(x,y,w,h,col,l){ctx.fillStyle=col+"33";ctx.fillRect(x,y,w,h);ctx.strokeStyle=col;ctx.lineWidth=4;ctx.strokeRect(x+2,y+2,w-4,h-4);ctx.fillStyle=col;ctx.fillRect(x,y,w,24);ctx.fillStyle="#fff";ctx.font="bold 13px sans-serif";ctx.fillText(l,x+8,y+17)}
@@ -67,26 +76,29 @@ ctx.fillStyle="#3c8a3c";ctx.fillRect(CAFE.x+300,CAFE.y+36,22,22);ctx.fillStyle="
 for(const[ox,oy]of[[150,80],[250,115]]){ctx.fillStyle="#d9b38c";ctx.fillRect(CAFE.x+ox,CAFE.y+oy,40,24)}
 for(const b of bots){ctx.fillStyle="#7b5536";ctx.fillRect(b.dx-22,b.dy-30,44,20);ctx.fillStyle="#222";ctx.fillRect(b.dx-10,b.dy-44,20,14);ctx.fillStyle=b.div.color;ctx.fillRect(b.dx-8,b.dy-42,16,10);ctx.fillStyle="#555";ctx.fillRect(b.dx-2,b.dy-30,4,3)}
 for(const b of [...bots].sort((a,b)=>a.y-b.y)){const mv=b.x!==b.tx||b.y!==b.ty,bob=mv?Math.round(Math.sin(b.phase))*2:0,p=3,ox=Math.round(b.x)-12,oy=Math.round(b.y)-36+bob;
-const px=(cx,cy,w,h,col)=>{ctx.fillStyle=col;ctx.fillRect(ox+cx*p,oy+cy*p,w*p,h*p)};const hr=HAIR[b.i%HAIR.length];
+const S=stOf(b).status;ctx.globalAlpha=S==="미가동"?0.4:1;const px=(cx,cy,w,h,col)=>{ctx.fillStyle=col;ctx.fillRect(ox+cx*p,oy+cy*p,w*p,h*p)};const hr=HAIR[b.i%HAIR.length];
 if(b.i===sel){ctx.fillStyle="#ffeb3b88";ctx.fillRect(ox-6,oy-6,36,60)}
 px(1,0,6,2,hr);px(1,2,6,4,"#f2c9a0");px(2,3,1,1,"#222");px(5,3,1,1,"#222");px(0,2,1,2,hr);px(7,2,1,2,hr);
 px(1,6,6,5,b.div.color);px(0,7,1,3,"#f2c9a0");px(7,7,1,3,"#f2c9a0");const lg=mv&&Math.sin(b.phase)>0;px(2,11,1,lg?3:4,"#333");px(5,11,1,lg?4:3,"#333");
-const ic=b.mode==="meeting"&&!mv?"💬":b.mode==="coffee"&&!mv?"☕":!mv?"⌨️":"";
-if(ic&&(b.mode!=="desk"||Math.sin(b.phase/3+b.i)>0.6)){ctx.font="13px sans-serif";ctx.fillText(ic,ox+20,oy-2)}
+ctx.globalAlpha=1;ctx.fillStyle=SCOL[S];ctx.beginPath();ctx.arc(ox+12,oy-4,4,0,7);ctx.fill();
+let ic=b.mode==="meeting"&&!mv?"💬":b.mode==="coffee"&&!mv?"☕":!mv?"⌨️":"";
+if(S==="미가동")ic=Math.sin(b.phase/4)>0?"💤":"z";else if(S==="막힘")ic="";
+if(S==="막힘"){ctx.fillStyle="#e74c3c";ctx.fillRect(ox+20,oy-18,12,16);ctx.fillStyle="#fff";ctx.font="bold 13px sans-serif";ctx.fillText("!",ox+23,oy-5)}
+else if(ic&&(b.mode!=="desk"||S==="작업중"||S==="미가동"||Math.sin(b.phase/3+b.i)>0.6)){ctx.font="13px sans-serif";ctx.fillStyle="#fff";ctx.fillText(ic,ox+20,oy-2)}
 if(b.i===sel){ctx.font="bold 12px sans-serif";const tw=ctx.measureText(b.name).width;ctx.fillStyle="#000c";ctx.fillRect(b.x-tw/2-4,oy-26,tw+8,17);ctx.fillStyle="#fff";ctx.fillText(b.name,b.x-tw/2,oy-13)}}}
 let lastMin=-1;
 function ui(){const now=Math.floor(sim),ev=EVENTS.find(e=>now>=e.s&&now<e.e),nx=EVENTS.find(e=>e.s>now);
-document.getElementById("head").textContent="🕐 "+fmt(now)+" · "+(ev?ev.name+" 진행 중":"업무 시간");
+document.getElementById("head").textContent="🎬 시뮬레이션 시각 "+fmt(now)+" · "+(ev?ev.name+" 진행 중":"업무 시간");
 document.getElementById("next").textContent=nx?"다음 일정: "+nx.name:"오늘 일정 끝";
 if(sel>=0){const b=bots[sel];document.getElementById("info").innerHTML="";const t=document.createElement("table");
-[["이름",b.name],["역할",b.role],["소속",b.div.emoji+" "+b.div.name],["지금",b.mode==="meeting"?"대회의실 회의 중":b.mode==="coffee"?"커피 코너":"자리에서 업무 중"]].forEach(([k,v])=>{const r=t.insertRow();r.insertCell().textContent=k;r.insertCell().textContent=v});
+[["이름",b.name],["역할",b.role],["소속",b.div.emoji+" "+b.div.name],["실제 상태",stOf(b).status],["최근 작업",stOf(b).summary],["마지막 활동",kst(stOf(b).lastActive)],["연출 위치",b.mode==="meeting"?"대회의실 회의 중":b.mode==="coffee"?"커피 코너":"자기 자리"]].forEach(([k,v])=>{const r=t.insertRow();r.insertCell().textContent=k;r.insertCell().textContent=v});
 document.getElementById("info").appendChild(t)}}
 let last=performance.now();
 function loop(t){const dt=Math.min(.1,(t-last)/1000);last=t;
 if(playing){sim+=dt*2*speed;if(sim>=1440)sim=410;const now=sim,ev=EVENTS.find(e=>now>=e.s&&now<e.e);
-for(const b of bots){if(ev&&ev.meet){if(b.mode!=="meeting"){[b.tx,b.ty]=seat(b.i);b.mode="meeting"}}
+for(const b of bots){const S=stOf(b).status;if(S==="미가동"){b.mode="desk";b.tx=b.dx;b.ty=b.dy}else if(ev&&ev.meet){if(b.mode!=="meeting"){[b.tx,b.ty]=seat(b.i);b.mode="meeting"}}
 else if(b.mode==="meeting"){b.mode="desk";b.tx=b.dx;b.ty=b.dy;b.until=now+30+Math.random()*90}
-else if(now>b.until){const lunch=ev&&!ev.meet;if(b.mode==="desk"&&(lunch||Math.random()<.35)){b.mode="coffee";b.tx=CAFE.x+110+Math.random()*210;b.ty=CAFE.y+60+Math.random()*80;b.until=now+10+Math.random()*20}
+else if(now>b.until){const lunch=ev&&!ev.meet;if(b.mode==="desk"&&S!=="작업중"&&S!=="막힘"&&(lunch||Math.random()<.35)){b.mode="coffee";b.tx=CAFE.x+110+Math.random()*210;b.ty=CAFE.y+60+Math.random()*80;b.until=now+10+Math.random()*20}
 else{b.mode="desk";b.tx=b.dx;b.ty=b.dy;b.until=now+40+Math.random()*120}}
 const vx=b.tx-b.x,vy=b.ty-b.y,d=Math.hypot(vx,vy),st=70*speed*dt;if(d>st){b.x+=vx/d*st;b.y+=vy/d*st}else{b.x=b.tx;b.y=b.ty}b.phase+=dt*8*speed}
 const m=Math.floor(sim);if(m!==lastMin){lastMin=m;ui()}}
@@ -98,6 +110,6 @@ document.querySelectorAll("#speeds button").forEach(b=>b.onclick=()=>{speed=+b.d
 document.getElementById("j7").onclick=()=>{sim=415};document.getElementById("j14").onclick=()=>{sim=835};
 const lg=document.getElementById("legend");DIVS.forEach(d=>{const s=document.createElement("span");s.innerHTML='<i class="sw" style="background:'+d.color+'"></i>'+d.emoji+" "+d.name;lg.appendChild(s)});
 const s2=document.createElement("span");s2.textContent="🏛️ 대회의실 · ☕ 커피 코너";lg.appendChild(s2);
-const ro=document.getElementById("roster");STAFF.forEach(([n,r,d])=>{const v=DIVS.find(x=>x.id===d),tr=ro.insertRow();[n,r,v.emoji+" "+v.name].forEach(t=>tr.insertCell().textContent=t)});
-ui();requestAnimationFrame(loop);
+const ro=document.getElementById("roster");function roster(){while(ro.rows.length>1)ro.deleteRow(1);bots.forEach(b=>{const s=stOf(b),tr=ro.insertRow();[b.name,b.role,b.div.emoji+" "+b.div.name,s.status,kst(s.lastActive)].forEach(t=>tr.insertCell().textContent=t)})}roster();
+ui();loadStatus();setInterval(loadStatus,5*60*1000);requestAnimationFrame(loop);
 </script></body></html>
