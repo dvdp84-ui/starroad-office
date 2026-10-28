@@ -1,23 +1,108 @@
 {
-  "updatedAt": "2026-10-28T13:05:00+09:00",
+  "updatedAt": "2026-10-28T14:46:00+09:00",
   "source": "ReadTranscript (각 봇 최근 세션 최대 60개 메시지)",
   "bots": {
-    "StarRoad 비서실장": {"id":"66aa6b26-71f1-41f6-8df4-e9374b29d207","status":"작업중","lastActive":"2026-10-28T13:03:00+09:00","summary":"FYF 장바구니 버그 수정·재배포를 앱개발사업부에 지시"},
-    "루틴관리과장": {"id":"b785d8bb-2524-4627-be3a-94cd0e263e66","status":"작업중","lastActive":"2026-10-28T13:00:00+09:00","summary":"주식초고수 일정 변경(3일 간격, 다음 10/31 08:00) 확인"},
-    "이것저것": {"id":null,"status":"미가동","lastActive":null,"summary":"기록 없음"},
-    "StarRoad 투자사업부": {"id":"2caee292-2e95-4563-91e5-c209c9d20d94","status":"보고완료","lastActive":"2026-10-28T06:33:00+09:00","summary":"오늘 아침 시장 보고 전달 (코스피 5,638 마감 등)"},
-    "주식초고수": {"id":"2b2eb211-cf50-452e-81b3-ab4db332c101","status":"작업중","lastActive":"2026-10-28T13:00:00+09:00","summary":"예시 1억 포트폴리오 점검(약 9,000만 원, -10%)"},
-    "바이매매봇": {"id":"0e9fecc1-2385-4959-bbd2-ae580448ffd4","status":"막힘","lastActive":"2026-10-27T22:27:00+09:00","summary":"바이비트 봇 설치 완료, API 키 미입력으로 실연결 대기"},
-    "에릭슈미츠": {"id":null,"status":"미가동","lastActive":null,"summary":"기록 없음"},
-    "StarRoad 앱개발사업부": {"id":"e10e080e-8373-4295-b779-27ea19824aec","status":"작업중","lastActive":"2026-10-28T13:02:00+09:00","summary":"FYF QA 완료, 장바구니 버그 수정·재배포 착수"},
-    "Proto Bot": {"id":null,"status":"미가동","lastActive":null,"summary":"기록 없음"},
-    "StarRoad 홍보사업부": {"id":"b61a7948-a185-4cfa-8b4a-c36525c7cec8","status":"작업중","lastActive":"2026-10-28T13:00:00+09:00","summary":"FYF 오픈 홍보안 작성, 사장님 확인 대기"},
-    "StarRoad 굿즈사업부": {"id":"f157be1f-e8c3-4fa3-982b-19184d93dc81","status":"작업중","lastActive":"2026-10-28T13:02:00+09:00","summary":"FYF 수입 가이드 정리 후 공급처 후속 작업"},
-    "StarRoad 리서치사업부": {"id":"2199cb95-1bb0-48a3-b2e4-c233efacac02","status":"보고완료","lastActive":"2026-10-28T06:24:00+09:00","summary":"아침 리서치 보고 전달 (경쟁사 목록은 미정)"},
-    "Researchy": {"id":null,"status":"미가동","lastActive":null,"summary":"기록 없음"},
-    "루미뚱이팝업스토어총괄기획자": {"id":"8cde2bbf-b841-45f4-af08-87ef7d262782","status":"대기","lastActive":"2026-10-28T09:09:00+09:00","summary":"아침 브리핑 전달, 브리핑 기준을 남은 일 목록으로 수정"},
-    "루미뚱이 그래픽담당": {"id":"a05b2c3c-648b-460c-aabc-e737ebf039aa","status":"대기","lastActive":"2026-10-27T10:28:00+09:00","summary":"키비주얼·엽서·굿즈 시안 8장 완성"},
-    "루미뚱이 공간담당": {"id":"a38bb583-6823-4611-98c3-354cb71eafa5","status":"대기","lastActive":"2026-10-27T10:28:00+09:00","summary":"성수 팝업 공간 계획 리포트 전달"},
-    "루미뚱이 홍보담당": {"id":"fe9bcb8b-b66b-4ecb-96d6-39002395abbe","status":"대기","lastActive":"2026-10-27T10:28:00+09:00","summary":"9주 홍보 일정·예산 3단계안 제안"}
+    "StarRoad 비서실장": {
+      "id": "66aa6b26-71f1-41f6-8df4-e9374b29d207",
+      "status": "작업중",
+      "lastActive": "2026-10-28T14:24:00+09:00",
+      "summary": "FYF 상품 15개 사진 재제작·사이트 반영, 약한 사진 4장 교체"
+    },
+    "루틴관리과장": {
+      "id": "b785d8bb-2524-4627-be3a-94cd0e263e66",
+      "status": "대기",
+      "lastActive": "2026-10-28T13:00:00+09:00",
+      "summary": "주식초고수 일정 변경(3일 간격, 다음 10/31 08:00) 확인"
+    },
+    "이것저것": {
+      "id": null,
+      "status": "미가동",
+      "lastActive": null,
+      "summary": "기록 없음"
+    },
+    "StarRoad 투자사업부": {
+      "id": "2caee292-2e95-4563-91e5-c209c9d20d94",
+      "status": "보고완료",
+      "lastActive": "2026-10-28T06:33:00+09:00",
+      "summary": "오늘 아침 시장 보고 전달 (코스피 5,638 마감 등)"
+    },
+    "주식초고수": {
+      "id": "2b2eb211-cf50-452e-81b3-ab4db332c101",
+      "status": "대기",
+      "lastActive": "2026-10-28T13:00:00+09:00",
+      "summary": "예시 1억 포트폴리오 점검(약 9,000만 원, -10%)"
+    },
+    "바이매매봇": {
+      "id": "0e9fecc1-2385-4959-bbd2-ae580448ffd4",
+      "status": "막힘",
+      "lastActive": "2026-10-27T22:27:00+09:00",
+      "summary": "바이비트 봇 설치 완료, API 키 미입력으로 실연결 대기"
+    },
+    "에릭슈미츠": {
+      "id": null,
+      "status": "미가동",
+      "lastActive": null,
+      "summary": "기록 없음"
+    },
+    "StarRoad 앱개발사업부": {
+      "id": "e10e080e-8373-4295-b779-27ea19824aec",
+      "status": "대기",
+      "lastActive": "2026-10-28T13:08:00+09:00",
+      "summary": "FYF 장바구니 수정 배포 완료(버전 4, 테스트 통과)"
+    },
+    "Proto Bot": {
+      "id": null,
+      "status": "미가동",
+      "lastActive": null,
+      "summary": "기록 없음"
+    },
+    "StarRoad 홍보사업부": {
+      "id": "b61a7948-a185-4cfa-8b4a-c36525c7cec8",
+      "status": "대기",
+      "lastActive": "2026-10-28T13:15:00+09:00",
+      "summary": "FYF 착용 컷 6장 제작(게시 안 함), 비서실장에 전달"
+    },
+    "StarRoad 굿즈사업부": {
+      "id": "f157be1f-e8c3-4fa3-982b-19184d93dc81",
+      "status": "대기",
+      "lastActive": "2026-10-28T13:19:00+09:00",
+      "summary": "FYF 공급사 점검 완료, 공급처 사진 18장 수집"
+    },
+    "StarRoad 리서치사업부": {
+      "id": "2199cb95-1bb0-48a3-b2e4-c233efacac02",
+      "status": "보고완료",
+      "lastActive": "2026-10-28T06:24:00+09:00",
+      "summary": "아침 리서치 보고 전달 (경쟁사 목록은 미정)"
+    },
+    "Researchy": {
+      "id": null,
+      "status": "미가동",
+      "lastActive": null,
+      "summary": "기록 없음"
+    },
+    "루미뚱이팝업스토어총괄기획자": {
+      "id": "8cde2bbf-b841-45f4-af08-87ef7d262782",
+      "status": "대기",
+      "lastActive": "2026-10-28T09:09:00+09:00",
+      "summary": "아침 브리핑 전달, 브리핑 기준을 남은 일 목록으로 수정"
+    },
+    "루미뚱이 그래픽담당": {
+      "id": "a05b2c3c-648b-460c-aabc-e737ebf039aa",
+      "status": "대기",
+      "lastActive": "2026-10-27T10:28:00+09:00",
+      "summary": "키비주얼·엽서·굿즈 시안 8장 완성"
+    },
+    "루미뚱이 공간담당": {
+      "id": "a38bb583-6823-4611-98c3-354cb71eafa5",
+      "status": "대기",
+      "lastActive": "2026-10-27T10:28:00+09:00",
+      "summary": "성수 팝업 공간 계획 리포트 전달"
+    },
+    "루미뚱이 홍보담당": {
+      "id": "fe9bcb8b-b66b-4ecb-96d6-39002395abbe",
+      "status": "대기",
+      "lastActive": "2026-10-27T10:28:00+09:00",
+      "summary": "9주 홍보 일정·예산 3단계안 제안"
+    }
   }
 }
